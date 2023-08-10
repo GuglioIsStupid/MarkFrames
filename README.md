@@ -1,3 +1,3 @@
 # MarkFrames
 
-## Source code for the bot found here: [https://twitter.com/MarkFnafFrames](https://twitter.com/MarkFnafFrames)
+## Bot for this source code is found here: [https://twitter.com/MarkFnafFrames](https://twitter.com/MarkFnafFrames)
