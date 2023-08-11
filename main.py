@@ -36,6 +36,7 @@ except:
 video_dir = "videos/"
 
 tmpimg = "tmpimg.jpg"
+tmpvid = "tmpvid.mp4"
 
 def getVideo():
     # return a video path
@@ -70,6 +71,20 @@ def getRandomScreenshot(video, duration):
     subprocess.check_output(cmd)
     return tmpimg
 
+def getRandomVideoClip(video, duration, clipLength):
+    # clips vary from 5-15 seconds
+    clipStart = random.uniform(0, duration - clipLength)
+    cmd = [
+        "ffmpeg",
+        "-ss", str(clipStart),
+        "-i", video,
+        "-t", str(clipLength),
+        "-c", "copy",
+        tmpvid
+    ]
+    #print(" ".join(cmd))
+    subprocess.check_output(cmd)
+
 timer = 3600.0
 # one hour max
 maxTimer = 3600.0
@@ -77,11 +92,14 @@ while True:
     timer += 1.0
     # should post ss?
     if timer >= maxTimer:
-        
         timer = 0.0
         video, videoName = getVideo()
         duration = getDuration(video)
-        screenshot = getRandomScreenshot(video, duration)
+        #50/50 chance for screenshot or video clip
+        if random.randint(0,1) == 0:
+            screenshot = getRandomScreenshot(video, duration)
+        else:
+            screenshot = getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))
         mediaID = api.media_upload(screenshot)
         Client.create_tweet(
             text = videoName,
