@@ -84,10 +84,11 @@ def getRandomVideoClip(video, duration, clipLength):
     ]
     #print(" ".join(cmd))
     subprocess.check_output(cmd)
+    return tmpvid
 
-timer = 3600.0
+timer = 1800.0
 # one hour max
-maxTimer = 3600.0
+maxTimer = 1800.0
 while True:
     timer += 1.0
     # should post ss?
@@ -96,10 +97,12 @@ while True:
         video, videoName = getVideo()
         duration = getDuration(video)
         #50/50 chance for screenshot or video clip
-        if random.randint(0,1) == 0:
+        """if random.randint(0,1) == 0:
             screenshot = getRandomScreenshot(video, duration)
         else:
-            screenshot = getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))
+            screenshot = getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))"""
+        
+        screenshot = random.randint(0, 1) == 0 and getRandomScreenshot(video, duration) or getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))
         mediaID = api.media_upload(screenshot)
         Client.create_tweet(
             text = videoName,
