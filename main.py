@@ -106,6 +106,7 @@ while True:
         # do a try loop until this works
         while True:
             try:
+                global screenshot 
                 screenshot = getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))
                 break
             except:
@@ -115,7 +116,8 @@ while True:
         # try to upload until it works
         while True:
             try:
-                mediaID = Client.upload_media(screenshot)
+                global mediaID 
+                mediaID = api.media_upload(screenshot)
                 break
             except:
                 print("Error uploading media, trying again...")
