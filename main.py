@@ -122,17 +122,12 @@ while True:
             except:
                 print("Error uploading media, trying again...")
                 continue
-        # try to post until it works
-        while True:
-            try:
-                Client.create_tweet(
-                    text = videoName,
-                    media_ids = [mediaID.media_id]
-                )
-                break
-            except:
-                print("Error posting tweet, trying again... lets wait till next time")
-                break
+        
+        #post
+        Client.create_tweet(
+            text = videoName,
+            media_ids = [mediaID]
+        )
         # delete the screenshot
         os.remove(screenshot)
 
