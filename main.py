@@ -107,7 +107,7 @@ while True:
         while True:
             try:
                 global screenshot 
-                screenshot = random.randint(0, 1) == 0 and getRandomScreenshot(video, duration) or getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))
+                screenshot = getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))
                 break
             except:
                 print("Error getting video clip, trying again...")
@@ -123,29 +123,16 @@ while True:
                 print("Error uploading media, trying again...")
                 continue
         # try to post until it works
-        try:
-            Client.create_tweet(
-                text = videoName,
-                media_ids = [mediaID.media_id]
-            )
-            break
-        except:
-            # keep generating a new one until it works
-            while True:
-                try:
-                    screenshot = random.randint(0, 1) == 0 and getRandomScreenshot(video, duration) or getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))
-                    
-                    mediaID = api.media_upload(screenshot)
-
-                    Client.create_tweet(
-                        text = videoName,
-                        media_ids = [mediaID.media_id]
-                    )
-                    break
-                except:
-                    print("Error posting tweet, trying again...")
-                    continue
-
+        while True:
+            try:
+                Client.create_tweet(
+                    text = videoName,
+                    media_ids = [mediaID.media_id]
+                )
+                break
+            except:
+                print("Error posting tweet, trying again... lets wait till next time")
+                break
         # delete the screenshot
         os.remove(screenshot)
 
