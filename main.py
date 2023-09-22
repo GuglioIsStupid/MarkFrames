@@ -102,31 +102,11 @@ while True:
         else:
             screenshot = getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))"""
         
-        #screenshot = random.randint(0, 1) == 0 and getRandomScreenshot(video, duration) or getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))
-        # do a try loop until this works
-        while True:
-            try:
-                global screenshot 
-                screenshot = getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))
-                break
-            except:
-                print("Error getting video clip, trying again...")
-                continue
-        #mediaID = api.media_upload(screenshot)
-        # try to upload until it works
-        while True:
-            try:
-                global mediaID 
-                mediaID = api.media_upload(screenshot)
-                break
-            except:
-                print("Error uploading media, trying again...")
-                continue
-        
-        #post
+        screenshot = random.randint(0, 1) == 0 and getRandomScreenshot(video, duration) or getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))
+        mediaID = api.media_upload(screenshot)
         Client.create_tweet(
             text = videoName,
-            media_ids = [mediaID]
+            media_ids = [mediaID.media_id]
         )
         # delete the screenshot
         os.remove(screenshot)
