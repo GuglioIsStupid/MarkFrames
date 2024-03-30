@@ -38,6 +38,9 @@ video_dir = "videos/"
 tmpimg = "tmpimg.jpg"
 tmpvid = "tmpvid.mp4"
 
+max_attempts = 10
+current_attempts = 0
+
 def getVideo():
     # return a video path
     video = random.choice(os.listdir(video_dir))
@@ -97,17 +100,26 @@ while True:
         video, videoName = getVideo()
         duration = getDuration(video)
         #50/50 chance for screenshot or video clip
-        """if random.randint(0,1) == 0:
-            screenshot = getRandomScreenshot(video, duration)
-        else:
-            screenshot = getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))"""
-        
-        screenshot = random.randint(0, 1) == 0 and getRandomScreenshot(video, duration) or getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))
-        mediaID = api.media_upload(screenshot)
-        Client.create_tweet(
-            text = videoName,
-            media_ids = [mediaID.media_id]
-        )
+        while True:
+            try:
+                screenshot = random.randint(0, 1) == 0 and getRandomScreenshot(video, duration) or getRandomVideoClip(video, duration, random.uniform(5.0, 15.0))
+                mediaID = api.media_upload(screenshot)
+                Client.create_tweet(
+                    text = videoName,
+                    media_ids = [mediaID.media_id]
+                )
+                break
+            except Exception as e:
+                print("Error: ", e)
+                current_attempts += 1
+                print("Attempt: ", current_attempts)
+                if current_attempts == max_attempts:
+                    print("Max attempts reached. Waiting for next tweet.")
+                    break
+                continue
+        current_attempts = 0
+
+                    
         # delete the screenshot
         os.remove(screenshot)
 
